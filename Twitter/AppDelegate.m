@@ -7,6 +7,9 @@
 //
 
 #import "AppDelegate.h"
+#import "TwitterClient.h"
+#import "LoginViewController.h"
+#import "TimelineViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +19,17 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogout) name:UserDidLogoutNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(userDidLogin) name:UserDidLoginNotification object:nil];
+
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    if ([Session currentUser]) {
+        [self userDidLogin];
+    } else {
+        [self userDidLogout];
+    }
+    [self.window makeKeyAndVisible];
+
     return YES;
 }
 
@@ -40,6 +53,22 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+- (BOOL) application:(UIApplication *)app openURL:(nonnull NSURL *)url options:(nonnull NSDictionary<NSString *,id> *)options{
+    [[TwitterClient sharedInstance] processOpenUrl:url];
+
+    return YES;
+}
+
+- (void) userDidLogout {
+    self.window.rootViewController = [[LoginViewController alloc] init];
+}
+
+- (void) userDidLogin {
+    TimelineViewController *vc = [[TimelineViewController alloc] initWithNibName:@"TimelineViewController" bundle:nil];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+    self.window.rootViewController = nav;
 }
 
 @end
