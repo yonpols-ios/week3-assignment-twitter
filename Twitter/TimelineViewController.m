@@ -8,10 +8,11 @@
 
 #import "TimelineViewController.h"
 #import "ComposeTweetViewController.h"
+#import "TweetDetailViewController.h"
 #import "TweetTableViewCell.h"
 #import "TwitterClient.h"
 
-@interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate, TweetTableViewCellDelegate, ComposeTweetViewControllerDelegate>
+@interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate, TweetTableViewCellDelegate, ComposeTweetViewControllerDelegate, TweetDetailViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *timelineTableView;
 @property (strong, nonatomic) UIRefreshControl *timelineRefreshControl;
 
@@ -81,10 +82,21 @@
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    Tweet *tweet = self.tweets[indexPath.row];
+    TweetDetailViewController *vc = [[TweetDetailViewController alloc] initWithUser:[Session currentUser] andTweet:tweet];
+    vc.delegate = self;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void) tweetCell:(TweetTableViewCell *)cell replyTweet:(Tweet *)tweet {
     ComposeTweetViewController *vc = [[ComposeTweetViewController alloc] initWithUser:[Session currentUser] andTweet:tweet];
     vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void) tweetDetail:(TweetDetailViewController *)detail replyTweet:(Tweet *)tweet {
+    [self tweetCell:nil replyTweet:tweet];
 }
 
 - (void) composeTweetViewController:(ComposeTweetViewController *)viewController newTweetComposed:(Tweet *)tweet {

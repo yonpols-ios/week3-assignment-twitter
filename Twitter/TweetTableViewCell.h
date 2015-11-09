@@ -10,6 +10,10 @@
 #import "TwitterClient.h"
 #import "Utils.h"
 
+extern long const kActiveRetweetColor;
+extern long const kActiveLikeColor;
+extern long const kNormalActionColor;
+
 @class TweetTableViewCell;
 
 @protocol TweetTableViewCellDelegate<NSObject>
@@ -19,8 +23,6 @@
 - (void) tweetCell:(TweetTableViewCell *)cell replyTweet:(Tweet *)tweet;
 
 @end
-
-
 
 @interface TweetTableViewCell : UITableViewCell
 

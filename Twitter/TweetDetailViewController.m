@@ -1,54 +1,85 @@
 //
-//  TweetTableViewCell.m
+//  TweetDetailViewController.m
 //  Twitter
 //
-//  Created by Juan Pablo Marzetti on 11/7/15.
+//  Created by Juan Pablo Marzetti on 11/8/15.
 //  Copyright © 2015 Juan Pablo Marzetti. All rights reserved.
 //
 
-#import "TweetTableViewCell.h"
-#import "ComposeTweetViewController.h"
-#import "Utils.h"
+#import "TweetDetailViewController.h"
 #import "UIImageView+AFNetworking.h"
-#import "NSDate+DateTools.h"
+#import "TweetTableViewCell.h"
 
-long const kActiveRetweetColor = 0x19CF86;
-long const kActiveLikeColor = 0xE81C4F;
-long const kNormalActionColor = 0xAAB8C2;
+@interface TweetDetailViewController ()
 
-@interface TweetTableViewCell()
-@property (weak, nonatomic) IBOutlet UIImageView *authorImage;
-@property (weak, nonatomic) IBOutlet UILabel *authorNameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *authorHandleLabel;
-@property (weak, nonatomic) IBOutlet UILabel *tweetCreatedAtLabel;
-@property (weak, nonatomic) IBOutlet UITextView *tweetTextView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetedHeightConstraint;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetedTopSpaceConstraint;
-@property (weak, nonatomic) IBOutlet UIView *retweetedView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetedViewHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *retweetedViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UILabel *retweetedAuthorLabel;
-@property (weak, nonatomic) IBOutlet UILabel *retweetCountLabel;
-@property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
-@property (weak, nonatomic) IBOutlet UIButton *replyButton;
+@property (weak, nonatomic) IBOutlet UIImageView *authorAvatarImage;
+@property (weak, nonatomic) IBOutlet UILabel *authorUserNameLabel;
+@property (weak, nonatomic) IBOutlet UILabel *authorUserHandleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *tweetCreatedAtLabel;
 @property (weak, nonatomic) IBOutlet UIButton *retweetButton;
 @property (weak, nonatomic) IBOutlet UIButton *likeButton;
+@property (weak, nonatomic) IBOutlet UILabel *retweetCountLabel;
+@property (weak, nonatomic) IBOutlet UILabel *likeCountLabel;
+@property (weak, nonatomic) IBOutlet UITextView *tweetTextView;
+
+@property (strong, nonatomic) Tweet *tweet;
+@property (strong, nonatomic) User *user;
 
 @end
 
-@implementation TweetTableViewCell
+@implementation TweetDetailViewController
 
-- (void)awakeFromNib {
-    // Initialization code
-    self.authorImage.layer.cornerRadius = 4;
-    self.authorImage.layer.masksToBounds = YES;
+- (instancetype) initWithUser:(User *)user andTweet:(Tweet *)tweet {
+    if (self == [super initWithNibName:@"TweetDetailViewController" bundle:nil]) {
+        self.user = user;
+        self.tweet = tweet;
+    }
+    
+    return self;
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:NO animated:YES];
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    self.navigationController.navigationBar.translucent = NO;
+    self.navigationItem.leftBarButtonItem.title = @"";
+    self.navigationItem.title = @"Tweet";
+    
+    [self.authorAvatarImage setImageWithURL:self.tweet.author.avatarUrl];
+    self.authorAvatarImage.layer.cornerRadius = 4;
+    self.authorAvatarImage.layer.masksToBounds = YES;
+
+    self.authorUserNameLabel.text = self.tweet.author.name;
+    self.authorUserHandleLabel.text = [NSString stringWithFormat:@"@%@", self.tweet.author.screenName];
+
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    [dateFormatter setTimeStyle:NSDateFormatterShortStyle];
+    
+    
+    self.tweetCreatedAtLabel.text = [dateFormatter stringFromDate:self.tweet.createdAt];
+    self.tweetTextLabel.text = self.tweet.text;
+    self.tweetTextView.text = self.tweet.text;
+    
+    if (self.tweet.retweetedFrom) {
+        self.retweetedAuthorLabel.text = [NSString stringWithFormat:@"%@ Retweeted", self.tweet.retweetedFrom.author.name];
+        self.retweetedViewHeightConstraint.priority = 250;
+        self.retweetedViewTopConstraint.priority = 999;
+    } else {
+        self.retweetedViewHeightConstraint.priority = 999;
+        self.retweetedViewTopConstraint.priority = 250;
+    }
+    
+    [self updateRetweetedState:self.tweet.retweeted withCount:self.tweet.retweetCount animated:NO];
+    [self updateLikedState:self.tweet.liked withCount:self.tweet.likeCount animated:NO];
 }
 
 - (IBAction)replyButtonClicked:(id)sender {
     if (self.delegate) {
-        [self.delegate tweetCell:self replyTweet:self.tweet];
+        [self.delegate tweetDetail:self replyTweet:self.tweet];
     }
 }
 
@@ -72,7 +103,7 @@ long const kNormalActionColor = 0xAAB8C2;
                 self.tweet.retweetCount++;
             }
         }];
-
+        
         [self updateRetweetedState:YES withCount:(self.tweet.retweetCount + 1) animated:YES];
     }
 }
@@ -80,10 +111,10 @@ long const kNormalActionColor = 0xAAB8C2;
 - (IBAction)likeButtonClicked:(id)sender {
     BOOL newLiked = !self.tweet.liked;
     long newCount = self.tweet.likeCount;
-
+    
     void (^completedRequest)(NSDictionary *newTweetInfo, NSError *error) = ^void(NSDictionary *newTweetInfo, NSError *error) {
         BOOL animated = NO;
-
+        
         if (error) {
             NSString* errorResponse = [[NSString alloc] initWithData:(NSData *)error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey] encoding:NSUTF8StringEncoding];
             
@@ -95,39 +126,17 @@ long const kNormalActionColor = 0xAAB8C2;
         
         [self updateLikedState:self.tweet.liked withCount:self.tweet.likeCount animated:animated];
     };
-
+    
     if (self.tweet.liked) {
         newCount--;
         [[TwitterClient sharedInstance] unlikeTweet:self.tweet completion:completedRequest];
-
+        
     } else {
         newCount++;
         [[TwitterClient sharedInstance] likeTweet:self.tweet completion:completedRequest];
     }
     
     [self updateLikedState:newLiked withCount:newCount animated:YES];
-}
-
-- (void) setTweet:(Tweet *)tweet {
-    _tweet = tweet;
-
-    [self.authorImage setImageWithURL:tweet.author.avatarUrl];
-    self.authorNameLabel.text = tweet.author.name;
-    self.authorHandleLabel.text = [NSString stringWithFormat:@"@%@", tweet.author.screenName];
-    self.tweetCreatedAtLabel.text = tweet.createdAt.shortTimeAgoSinceNow;
-    self.tweetTextView.text = tweet.text;
-
-    if (tweet.retweetedFrom) {
-        self.retweetedAuthorLabel.text = [NSString stringWithFormat:@"%@ Retweeted", tweet.retweetedFrom.author.name];
-        self.retweetedHeightConstraint.priority = 250;
-        self.retweetedTopSpaceConstraint.priority = 999;
-    } else {
-        self.retweetedHeightConstraint.priority = 999;
-        self.retweetedTopSpaceConstraint.priority = 250;
-    }
-    
-    [self updateRetweetedState:tweet.retweeted withCount:tweet.retweetCount animated:NO];
-    [self updateLikedState:tweet.liked withCount:tweet.likeCount animated:NO];
 }
 
 - (void) updateRetweetedState:(BOOL)retweeted withCount:(long long)count animated:(BOOL)animated {
@@ -154,7 +163,7 @@ long const kNormalActionColor = 0xAAB8C2;
         [self.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
         self.likeCountLabel.textColor = UIColorFromRGB(kNormalActionColor);
     }
-
+    
     if (count == 0) {
         self.likeCountLabel.text = @"";
     } else {

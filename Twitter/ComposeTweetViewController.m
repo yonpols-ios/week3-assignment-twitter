@@ -77,13 +77,6 @@ long const TWEET_MAX_LENGTH = 140;
     UIBarButtonItem *authorImage = [[UIBarButtonItem alloc] initWithCustomView:avatarImageView];
     self.navigationItem.leftBarButtonItem = authorImage;
 
-//    //    self.navigationItem.hidesBackButton = YES;
-//    UIImageView *authorAvatar = [[UIImageView alloc] init];
-//    authorAvatar.image = [UIImage imageNamed:@"reply"];
-////    [authorAvatar setImageWithURL:self.author.avatarUrl];
-//    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:authorAvatar];
-//    self.navigationItem.rightBarButtonItem = item;
-    
     [self textViewDidChange:self.tweetText];
     [self.tweetText becomeFirstResponder];
     [self.tweetText setSelectedTextRange:[self.tweetText textRangeFromPosition:[self.tweetText endOfDocument] toPosition:[self.tweetText endOfDocument]]];
