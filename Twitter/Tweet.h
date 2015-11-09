@@ -17,6 +17,7 @@
 @property (strong, nonatomic) User *author;
 @property (strong, nonatomic) NSDictionary *rawData;
 @property (strong, nonatomic) Tweet *retweetedFrom;
+@property (strong, nonatomic) Tweet *inReplyTo;
 @property (assign, nonatomic) long long retweetCount;
 @property (assign, nonatomic) long long likeCount;
 @property (assign, nonatomic) BOOL retweeted;
@@ -25,6 +26,7 @@
 + (NSArray *) tweetsWithArray:(NSArray *)array;
 
 - (instancetype) initWithDictionary:(NSDictionary *)dictionary;
+- (instancetype) initFromText:(NSString *)text author:(User *)author inReplyTo:(Tweet *)inReplyTo;
 - (void) updateWithDictionary:(NSDictionary *)dictionary;
 
 - (NSString *) originalTweetId;

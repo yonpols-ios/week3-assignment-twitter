@@ -10,8 +10,21 @@
 #import "TwitterClient.h"
 #import "Utils.h"
 
+@class TweetTableViewCell;
+
+@protocol TweetTableViewCellDelegate<NSObject>
+
+@optional
+
+- (void) tweetCell:(TweetTableViewCell *)cell replyTweet:(Tweet *)tweet;
+
+@end
+
+
+
 @interface TweetTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) Tweet *tweet;
+@property (strong, nonatomic) id<TweetTableViewCellDelegate> delegate;
 
 @end

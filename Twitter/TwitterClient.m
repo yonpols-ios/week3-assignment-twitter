@@ -124,6 +124,24 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     }];
 }
 
+- (void) tweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError * error))completion {
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    parameters[@"status"] = tweet.text;
+    if (tweet.inReplyTo) {
+        parameters[@"in_reply_to_status_id"] = tweet.inReplyTo.tweetId;
+    };
+    
+    [self POST:@"/1.1/statuses/update.json" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+        if (completion) {
+            completion(responseObject, nil);
+        }
+    } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {
+        if (completion) {
+            completion(nil, error);
+        }
+    }];
+}
+
 
 
 @end

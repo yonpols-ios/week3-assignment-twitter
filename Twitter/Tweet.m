@@ -29,6 +29,17 @@
     return self;
 }
 
+- (instancetype) initFromText:(NSString *)text author:(User *)author inReplyTo:(nullable Tweet *)inReplyTo {
+    if (self == [super init]) {
+        self.text = text;
+        self.author = author;
+        self.inReplyTo = inReplyTo;
+        self.createdAt = [NSDate date];
+    }
+    
+    return self;
+}
+
 - (void) updateWithDictionary:(NSDictionary *)dictionary {
     self.rawData = dictionary;
     self.tweetId = dictionary[@"id_str"];

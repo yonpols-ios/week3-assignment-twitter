@@ -25,5 +25,6 @@
 - (void) unlikeTweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError * error))completion;
 - (void) retweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError *error))completion;
 - (void) unRetweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError * error))completion;
+- (void) tweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError * error))completion;
 
 @end

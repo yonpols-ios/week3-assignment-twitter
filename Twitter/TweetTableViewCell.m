@@ -7,6 +7,7 @@
 //
 
 #import "TweetTableViewCell.h"
+#import "ComposeTweetViewController.h"
 #import "Utils.h"
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+DateTools.h"
@@ -48,6 +49,9 @@ long const kNormalActionColor = 0xAAB8C2;
 }
 
 - (IBAction)replyButtonClicked:(id)sender {
+    if (self.delegate) {
+        [self.delegate tweetCell:self replyTweet:self.tweet];
+    }
 }
 
 - (IBAction)retweetButtonClicked:(id)sender {
