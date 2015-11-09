@@ -19,6 +19,8 @@
 @property (strong, nonatomic) TwitterClient *client;
 @property (strong, nonatomic) NSArray *tweets;
 @property (assign, nonatomic) unsigned long long minTweetId;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tweetHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *tweetWidthConstraint;
 
 @end
 
@@ -26,6 +28,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationController.navigationBar.translucent = NO;
     
     UIImage *titleImage = [UIImage imageNamed:@"twitter"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
@@ -37,7 +41,6 @@
                                                          target:self
                                                          action:@selector(composeTweet)];
     self.navigationItem.rightBarButtonItem = newTweet;
-    
     
     self.client = [TwitterClient sharedInstance];
     
@@ -60,6 +63,12 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (tableView.alpha == 0) {
+        [UIView animateWithDuration:0.5 animations:^{
+            tableView.alpha = 1;
+        }];
+    }
+
     return self.tweets.count;
 }
 

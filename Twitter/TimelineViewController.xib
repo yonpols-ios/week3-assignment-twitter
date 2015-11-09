@@ -8,6 +8,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="TimelineViewController">
             <connections>
                 <outlet property="timelineTableView" destination="nVj-JV-MmM" id="DKa-F5-jBe"/>
+                <outlet property="tweetHeightConstraint" destination="qnw-lf-p65" id="Q7t-aK-Wg3"/>
+                <outlet property="tweetWidthConstraint" destination="1jV-sP-u65" id="mPU-hZ-7jy"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -16,21 +18,34 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nVj-JV-MmM">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="white-twitter" translatesAutoresizingMaskIntoConstraints="NO" id="gyq-vs-2IG">
+                    <rect key="frame" x="128" y="252" width="64" height="64"/>
+                    <animations/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="64" id="1jV-sP-u65"/>
+                        <constraint firstAttribute="height" constant="64" id="qnw-lf-p65"/>
+                    </constraints>
+                </imageView>
+                <tableView clipsSubviews="YES" alpha="0.0" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nVj-JV-MmM">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                     <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </tableView>
             </subviews>
             <animations/>
-            <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.33333333329999998" green="0.67450980390000004" blue="0.93333333330000001" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="gyq-vs-2IG" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="BEc-gU-q6z"/>
                 <constraint firstAttribute="bottom" secondItem="nVj-JV-MmM" secondAttribute="bottom" id="WGY-8C-etg"/>
                 <constraint firstItem="nVj-JV-MmM" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="dZW-q9-8nr"/>
+                <constraint firstItem="gyq-vs-2IG" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="iTb-90-8Nr"/>
                 <constraint firstItem="nVj-JV-MmM" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="k7R-5h-oYq"/>
                 <constraint firstAttribute="trailing" secondItem="nVj-JV-MmM" secondAttribute="trailing" id="pwt-51-rJn"/>
             </constraints>
             <point key="canvasLocation" x="387" y="352"/>
         </view>
     </objects>
+    <resources>
+        <image name="white-twitter" width="85" height="85"/>
+    </resources>
 </document>

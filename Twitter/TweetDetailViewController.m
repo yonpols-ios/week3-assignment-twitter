@@ -61,7 +61,6 @@
     
     
     self.tweetCreatedAtLabel.text = [dateFormatter stringFromDate:self.tweet.createdAt];
-    self.tweetTextLabel.text = self.tweet.text;
     self.tweetTextView.text = self.tweet.text;
     
     if (self.tweet.retweetedFrom) {
