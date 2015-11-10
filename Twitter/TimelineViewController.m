@@ -29,8 +29,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.translucent = NO;
-    
     UIImage *titleImage = [UIImage imageNamed:@"twitter"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
 
@@ -64,7 +62,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView.alpha == 0) {
-        [UIView animateWithDuration:0.5 animations:^{
+        self.navigationController.navigationBar.translucent = NO;
+        [UIView animateWithDuration:0.3 animations:^{
             tableView.alpha = 1;
         }];
     }
