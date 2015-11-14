@@ -29,6 +29,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.alpha = 0;
     UIImage *titleImage = [UIImage imageNamed:@"twitter"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
 
@@ -61,13 +62,6 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (tableView.alpha == 0) {
-        self.navigationController.navigationBar.translucent = NO;
-        [UIView animateWithDuration:0.3 animations:^{
-            tableView.alpha = 1;
-        }];
-    }
-
     return self.tweets.count;
 }
 
@@ -75,6 +69,15 @@
     TweetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"tweetCell"];
     cell.tweet = self.tweets[indexPath.row];
     cell.delegate = self;
+    
+    if (indexPath.row == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row && tableView.alpha == 0) {
+        [UIView animateWithDuration:0.2 animations:^{
+            self.navigationController.navigationBar.translucent = NO;
+            self.navigationController.navigationBar.alpha = 1;
+            tableView.alpha = 1;
+        } completion:^(BOOL finished) {
+        }];
+    }
     
     if (indexPath.row == (self.tweets.count - 1)) {
         UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width, 50)];
@@ -86,6 +89,7 @@
         
         [self loadTweets];
     }
+    
 
     return cell;
 }

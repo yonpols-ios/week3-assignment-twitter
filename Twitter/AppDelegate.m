@@ -11,7 +11,10 @@
 #import "LoginViewController.h"
 #import "TimelineViewController.h"
 
-@interface AppDelegate ()
+#import "HamburgerMenuViewController.h"
+#import "MenuViewController.h"
+
+@interface AppDelegate () <HamburgerMenuViewControllerDelegate>
 
 @end
 
@@ -66,9 +69,14 @@
 }
 
 - (void) userDidLogin {
-    TimelineViewController *vc = [[TimelineViewController alloc] initWithNibName:@"TimelineViewController" bundle:nil];
-    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
-    self.window.rootViewController = nav;
+    HamburgerMenuViewController *hvc = [[HamburgerMenuViewController alloc] init];
+    hvc.delegate = self;
+    MenuViewController *mvc = [[MenuViewController alloc] init];
+    mvc.user = [Session currentUser];
+    hvc.menuViewController = mvc;
+    self.window.rootViewController = hvc;
 }
+
+
 
 @end
