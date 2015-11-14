@@ -31,6 +31,11 @@
                         ];
 
     self.menuTableView.delegate = self;
+    self.menuTableView.dataSource = self;
+
+    [self.avatarImage setImageWithURL:self.userSession.user.avatarUrl];
+    self.nameLabel.text = self.userSession.user.name;
+    self.descriptionLabel.text = self.userSession.user.tagLine;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -44,21 +49,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [self dequeueBasicCellForTableView:tableView];
-    
     cell.textLabel.text = self.menuActions[indexPath.row][@"text"];
     
     return cell;
 }
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    switch (indexPath.row) {
+        case 0:
+            [self.userSession showProfile];
+            break;
 
-- (void) setUser:(User *)user {
-    _user = user;
-    if (self.view) {
-        [self.avatarImage setImageWithURL:user.avatarUrl];
-        self.nameLabel.text = user.name;
-        self.descriptionLabel.text = user.tagLine;
+        case 1:
+            [self.userSession showTimeline];
+            break;
+
+        case 2:
+            [self.userSession showMentions];
+            break;
+            
+        default:
+            break;
     }
 }
+
 
 - (UITableViewCell *)dequeueBasicCellForTableView:(UITableView *)tableView {
     static NSString *CellIdentifier = @"Cell";

@@ -13,14 +13,14 @@
 
 @protocol ComposeTweetViewControllerDelegate <NSObject>
 
-- (void)composeTweetViewController:(ComposeTweetViewController *)viewController newTweetComposed:(Tweet *)tweet;
+- (void)composeTweetViewController:(ComposeTweetViewController *)viewController newTweet:(NSString *)text inReplyTo:(Tweet *)tweet;
 
 @end
 
 @interface ComposeTweetViewController : UIViewController
 
 - (instancetype) initWithUser:(User *)user;
-- (instancetype) initWithUser:(User *)user andTweet:(Tweet *)tweet;
+- (instancetype) initWithUser:(User *)user inReplyTo:(Tweet *)tweet;
 
 @property (weak, nonatomic) id<ComposeTweetViewControllerDelegate> delegate;
 

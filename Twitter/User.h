@@ -13,7 +13,11 @@
 @property (strong, nonatomic) NSString *name;
 @property (strong, nonatomic) NSString *screenName;
 @property (strong, nonatomic) NSURL *avatarUrl;
+@property (strong, nonatomic) NSURL *backgroundUrl;
 @property (strong, nonatomic) NSString *tagLine;
+@property (assign, nonatomic) NSInteger followersCount;
+@property (assign, nonatomic) NSInteger friendsCount;
+
 @property (strong, nonatomic) NSDictionary *rawData;
 
 - (instancetype) initWithDictionary:(NSDictionary *)dictionary;

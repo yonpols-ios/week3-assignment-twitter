@@ -12,7 +12,7 @@
 
 @protocol HamburgerMenuViewControllerDelegate <NSObject>
 
-@optional
+@required
 - (BOOL)hamburgerMenuViewController:(HamburgerMenuViewController *)viewController willShowMenuWithAnimation:(BOOL)animation;
 - (void)hamburgerMenuViewController:(HamburgerMenuViewController *)viewController didShowMenuWithAnimation:(BOOL)animation;
 - (BOOL)hamburgerMenuViewController:(HamburgerMenuViewController *)viewController willCloseMenuWithAnimation:(BOOL)animation;
@@ -30,7 +30,7 @@
 @property (weak, nonatomic) UIViewController *contentViewController;
 @property (assign, readonly, nonatomic) BOOL menuOpen;
 
-- (void) openMenuWithAnimation:(BOOL)animated;
-- (void) closeMenuWithAnimation:(BOOL)animated;
+- (void) openMenu;
+- (void) closeMenu;
 
 @end

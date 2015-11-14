@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "User.h"
+#import "UserSession.h"
 
 @interface TimelineViewController : UIViewController
+
+@property (strong, nonatomic) UserSession *userSession;
 
 @end

@@ -29,7 +29,7 @@ long const TWEET_MAX_LENGTH = 140;
 
 @implementation ComposeTweetViewController
 
-- (instancetype) initWithUser:(User *)user andTweet:(Tweet *)tweet {
+- (instancetype) initWithUser:(User *)user inReplyTo:(Tweet *)tweet {
     if (self == [super initWithNibName:@"ComposeTweetViewController" bundle:nil]) {
         self.author = user;
         self.inReplyTo = tweet;
@@ -38,7 +38,7 @@ long const TWEET_MAX_LENGTH = 140;
     return self;
 }
 - (instancetype) initWithUser:(User *)user {
-    return [self initWithUser:user andTweet:nil];
+    return [self initWithUser:user inReplyTo:nil];
 }
 
 - (void)viewDidLoad {
@@ -95,8 +95,7 @@ long const TWEET_MAX_LENGTH = 140;
 }
 
 - (IBAction)tweetButtonClicked:(UIButton *)sender {
-    Tweet *tweet = [[Tweet alloc] initFromText:self.tweetText.text author:self.author inReplyTo:self.inReplyTo];
-    [self.delegate composeTweetViewController:self newTweetComposed:tweet];
+    [self.delegate composeTweetViewController:self newTweet:self.tweetText.text inReplyTo:self.inReplyTo];
     [self dismissController];
 }
 

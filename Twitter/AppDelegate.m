@@ -9,12 +9,9 @@
 #import "AppDelegate.h"
 #import "TwitterClient.h"
 #import "LoginViewController.h"
-#import "TimelineViewController.h"
+#import "UserSession.h"
 
-#import "HamburgerMenuViewController.h"
-#import "MenuViewController.h"
-
-@interface AppDelegate () <HamburgerMenuViewControllerDelegate>
+@interface AppDelegate ()
 
 @end
 
@@ -69,12 +66,8 @@
 }
 
 - (void) userDidLogin {
-    HamburgerMenuViewController *hvc = [[HamburgerMenuViewController alloc] init];
-    hvc.delegate = self;
-    MenuViewController *mvc = [[MenuViewController alloc] init];
-    mvc.user = [Session currentUser];
-    hvc.menuViewController = mvc;
-    self.window.rootViewController = hvc;
+    UserSession *userSession = [[UserSession alloc] initWithUser:[Session currentUser]];
+    [userSession presentInWindow:self.window];
 }
 
 

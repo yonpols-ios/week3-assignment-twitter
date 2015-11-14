@@ -16,6 +16,9 @@
         self.name = dictionary[@"name"];
         self.screenName = dictionary[@"screen_name"];
         self.avatarUrl = [NSURL URLWithString:dictionary[@"profile_image_url"]];
+        self.backgroundUrl = [NSURL URLWithString:dictionary[@"profile_background_image_url"]];
+        self.followersCount = [dictionary[@"followers_count"] longValue];
+        self.friendsCount = [dictionary[@"friends_count"] longValue];
         self.tagLine = dictionary[@"description"];
     }
     

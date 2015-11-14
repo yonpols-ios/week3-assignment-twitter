@@ -12,6 +12,7 @@
 #import "UIImageView+AFNetworking.h"
 #import "NSDate+DateTools.h"
 
+
 long const kActiveRetweetColor = 0x19CF86;
 long const kActiveLikeColor = 0xE81C4F;
 long const kNormalActionColor = 0xAAB8C2;
@@ -77,6 +78,12 @@ long const kNormalActionColor = 0xAAB8C2;
     }
 }
 
+- (IBAction)onAvatarTapGestureRecognizer:(id)sender {
+    if (self.delegate) {
+        [self.delegate tweetCell:self profileTap:self.tweet.author];
+    }
+}
+
 - (IBAction)likeButtonClicked:(id)sender {
     BOOL newLiked = !self.tweet.liked;
     long newCount = self.tweet.likeCount;
@@ -125,6 +132,9 @@ long const kNormalActionColor = 0xAAB8C2;
         self.retweetedHeightConstraint.priority = 999;
         self.retweetedTopSpaceConstraint.priority = 250;
     }
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAvatarTapGestureRecognizer:)];
+    [self.authorImage addGestureRecognizer:tapRecognizer];
     
     [self updateRetweetedState:tweet.retweeted withCount:tweet.retweetCount animated:NO];
     [self updateLikedState:tweet.liked withCount:tweet.likeCount animated:NO];

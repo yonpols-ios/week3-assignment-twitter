@@ -21,6 +21,7 @@ extern long const kNormalActionColor;
 @optional
 
 - (void) tweetCell:(TweetTableViewCell *)cell replyTweet:(Tweet *)tweet;
+- (void) tweetCell:(TweetTableViewCell *)cell profileTap:(User *)user;
 
 @end
 

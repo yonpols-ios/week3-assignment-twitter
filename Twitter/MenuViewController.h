@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "TwitterClient.h"
+#import "UserSession.h"
 
 @interface MenuViewController : UIViewController
 
-@property (strong, nonatomic) User *user;
+@property (strong, nonatomic) UserSession *userSession;
 
 @end

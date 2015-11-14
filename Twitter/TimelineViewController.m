@@ -7,16 +7,15 @@
 //
 
 #import "TimelineViewController.h"
+#import "TweetTableViewCell.h"
 #import "ComposeTweetViewController.h"
 #import "TweetDetailViewController.h"
-#import "TweetTableViewCell.h"
-#import "TwitterClient.h"
+#import "ProfileViewController.h"
 
 @interface TimelineViewController () <UITableViewDataSource, UITableViewDelegate, TweetTableViewCellDelegate, ComposeTweetViewControllerDelegate, TweetDetailViewControllerDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *timelineTableView;
 @property (strong, nonatomic) UIRefreshControl *timelineRefreshControl;
 
-@property (strong, nonatomic) TwitterClient *client;
 @property (strong, nonatomic) NSArray *tweets;
 @property (assign, nonatomic) unsigned long long minTweetId;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *tweetHeightConstraint;
@@ -29,7 +28,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationController.navigationBar.alpha = 0;
     UIImage *titleImage = [UIImage imageNamed:@"twitter"];
     self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
 
@@ -40,8 +38,6 @@
                                                          target:self
                                                          action:@selector(composeTweet)];
     self.navigationItem.rightBarButtonItem = newTweet;
-    
-    self.client = [TwitterClient sharedInstance];
     
     self.timelineTableView.delegate = self;
     self.timelineTableView.dataSource = self;
@@ -56,11 +52,6 @@
     [self doTimelineRefresh];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.tweets.count;
 }
@@ -69,15 +60,6 @@
     TweetTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"tweetCell"];
     cell.tweet = self.tweets[indexPath.row];
     cell.delegate = self;
-    
-    if (indexPath.row == ((NSIndexPath*)[[tableView indexPathsForVisibleRows] lastObject]).row && tableView.alpha == 0) {
-        [UIView animateWithDuration:0.2 animations:^{
-            self.navigationController.navigationBar.translucent = NO;
-            self.navigationController.navigationBar.alpha = 1;
-            tableView.alpha = 1;
-        } completion:^(BOOL finished) {
-        }];
-    }
     
     if (indexPath.row == (self.tweets.count - 1)) {
         UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, cell.frame.size.width, 50)];
@@ -102,20 +84,26 @@
 }
 
 - (void) tweetCell:(TweetTableViewCell *)cell replyTweet:(Tweet *)tweet {
-    ComposeTweetViewController *vc = [[ComposeTweetViewController alloc] initWithUser:[Session currentUser] andTweet:tweet];
+    ComposeTweetViewController *vc = [[ComposeTweetViewController alloc] initWithUser:[Session currentUser] inReplyTo:tweet];
     vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+-(void) tweetCell:(TweetTableViewCell *)cell profileTap:(User *)user {
+    ProfileViewController *pvc = [[ProfileViewController alloc] init];
+    pvc.user = user;
+    [self.navigationController pushViewController:pvc animated:YES];
 }
 
 - (void) tweetDetail:(TweetDetailViewController *)detail replyTweet:(Tweet *)tweet {
     [self tweetCell:nil replyTweet:tweet];
 }
 
-- (void) composeTweetViewController:(ComposeTweetViewController *)viewController newTweetComposed:(Tweet *)tweet {
-    [self.client tweet:tweet completion:nil];
+- (void) composeTweetViewController:(ComposeTweetViewController *)viewController newTweet:(NSString *)text inReplyTo:(Tweet *)tweet {
+    Tweet *newTweet = [self.userSession composeTweet:text inReplyTo:tweet];
     
     NSMutableArray *tweets = [[NSMutableArray alloc] init];
-    [tweets addObject:tweet];
+    [tweets addObject:newTweet];
     [tweets addObjectsFromArray:self.tweets];
     self.tweets = tweets;
     [self.timelineTableView reloadData];
@@ -128,7 +116,7 @@
         parameters = @{@"max_id": @(self.minTweetId)};
     }
 
-    [self.client homeTimeLineWithParameters:parameters completion:^(NSArray *tweets, NSError *error) {
+    [self.userSession.client homeTimeLineWithParameters:parameters completion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             if (parameters) {
                 self.tweets = [self.tweets arrayByAddingObjectsFromArray:tweets];

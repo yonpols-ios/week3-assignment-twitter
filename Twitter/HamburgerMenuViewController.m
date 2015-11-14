@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIView *menuContainerView;
 @property (weak, nonatomic) IBOutlet UIView *contentContainerView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *contentContainerLeadingConstraint;
+@property (strong, nonatomic) IBOutlet UITapGestureRecognizer *tapGestureRecognizer;
 
 @end
 
@@ -61,25 +62,44 @@
         _contentViewController = contentViewController;
         
         if (self.menuOpen) {
-            [self closeMenuWithAnimation:YES];
+            [self closeMenu];
         }
     }
 }
 
-- (void) openMenuWithAnimation:(BOOL)animated {
-    [UIView animateWithDuration:(animated ? 0.25 : 0) animations:^{
+- (void) openMenu {
+    self.contentViewController.view.userInteractionEnabled = NO;
+    self.tapGestureRecognizer.cancelsTouchesInView = YES;
+    [UIView animateWithDuration:0.25 animations:^{
         self.contentContainerLeadingConstraint.constant = self.view.frame.size.width - 50;
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _menuOpen = YES && finished;
+        
+        if (finished && self.delegate) {
+            [self.delegate hamburgerMenuViewController:self didShowMenuWithAnimation:YES];
+        }
     }];
 }
 
-- (void) closeMenuWithAnimation:(BOOL)animated {
-    [UIView animateWithDuration:(animated ? 0.25 : 0) animations:^{
+- (void) closeMenu {
+    [UIView animateWithDuration:0.25 animations:^{
         self.contentContainerLeadingConstraint.constant = 0;
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _menuOpen = !finished;
+        if (finished && self.delegate) {
+            [self.delegate hamburgerMenuViewController:self didCloseMenuWithAnimation:YES];
+        }
+        self.contentViewController.view.userInteractionEnabled = YES;
+        self.tapGestureRecognizer.cancelsTouchesInView = NO;
     }];
+}
+
+- (IBAction)onTapContentGesture:(UITapGestureRecognizer *)sender {
+    if (self.menuOpen) {
+        [self closeMenu];
+    }
 }
 
 - (IBAction)onPanContentContainerGesture:(UIPanGestureRecognizer *)sender {
@@ -100,25 +120,11 @@
     } else if (sender.state == UIGestureRecognizerStateChanged && _delegateActionAnswer) {
         self.contentContainerLeadingConstraint.constant = _originalcontentContainerLeadingConstant + translation.x;
     } else if (sender.state == UIGestureRecognizerStateEnded && _delegateActionAnswer) {
-        [UIView animateWithDuration:0.25 animations:^{
-            if (velocity.x > 0) {
-                self.contentContainerLeadingConstraint.constant = self.view.frame.size.width - 50;
-            } else {
-                self.contentContainerLeadingConstraint.constant = 0;
-            }
-            [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            if (finished) {
-                _menuOpen = !_menuOpen;
-                if (self.delegate) {
-                    if (_menuOpen) {
-                        [self.delegate hamburgerMenuViewController:self didShowMenuWithAnimation:YES];
-                    } else {
-                        [self.delegate hamburgerMenuViewController:self didCloseMenuWithAnimation:YES];
-                    }
-                }
-            }
-        }];
+        if (velocity.x > 0) {
+            [self openMenu];
+        } else {
+            [self closeMenu];
+        }
     }
 }
 
