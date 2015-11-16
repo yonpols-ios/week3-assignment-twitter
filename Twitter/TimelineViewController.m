@@ -28,17 +28,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIImage *titleImage = [UIImage imageNamed:@"twitter"];
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
-
-    UIImage *newTweetImage = [UIImage imageNamed:@"new"];
-    newTweetImage = [newTweetImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    UIBarButtonItem *newTweet = [[UIBarButtonItem alloc]initWithImage:newTweetImage
-                                                         style:UIBarButtonItemStylePlain
-                                                         target:self
-                                                         action:@selector(composeTweet)];
-    self.navigationItem.rightBarButtonItem = newTweet;
-    
     self.timelineTableView.delegate = self;
     self.timelineTableView.dataSource = self;
     self.timelineTableView.estimatedRowHeight = 100;
@@ -50,6 +39,38 @@
     [self.timelineTableView insertSubview:self.timelineRefreshControl atIndex:0];
     
     [self doTimelineRefresh];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    UIImage *titleImage = [UIImage imageNamed:@"twitter"];
+    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:titleImage];
+    
+    UIImage *newTweetImage = [UIImage imageNamed:@"new"];
+    newTweetImage = [newTweetImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIBarButtonItem *newTweet = [[UIBarButtonItem alloc]initWithImage:newTweetImage
+                                                                style:UIBarButtonItemStylePlain
+                                                               target:self
+                                                               action:@selector(composeTweet)];
+    self.navigationItem.rightBarButtonItem = newTweet;
+    
+    UIImage *menuImage = [UIImage imageNamed:@"menu"];
+    menuImage = [menuImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIBarButtonItem *menu = [[UIBarButtonItem alloc]initWithImage:menuImage
+                                                            style:UIBarButtonItemStylePlain
+                                                           target:self
+                                                           action:@selector(showMenu)];
+    self.navigationItem.leftBarButtonItem = menu;
+    
+
+    self.navigationController.navigationBar.shadowImage = [UIImage new];
+    self.navigationController.navigationBar.translucent = NO;
+    
+    [self setNeedsStatusBarAppearanceUpdate];
+    [self.userSession.currentController setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleDefault;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -92,6 +113,7 @@
 -(void) tweetCell:(TweetTableViewCell *)cell profileTap:(User *)user {
     ProfileViewController *pvc = [[ProfileViewController alloc] init];
     pvc.user = user;
+    pvc.userSession = self.userSession;
     [self.navigationController pushViewController:pvc animated:YES];
 }
 
@@ -116,7 +138,7 @@
         parameters = @{@"max_id": @(self.minTweetId)};
     }
 
-    [self.userSession.client homeTimeLineWithParameters:parameters completion:^(NSArray *tweets, NSError *error) {
+    [self.userSession.client timeline:self.timelineType withParameters:parameters completion:^(NSArray *tweets, NSError *error) {
         if (tweets) {
             if (parameters) {
                 self.tweets = [self.tweets arrayByAddingObjectsFromArray:tweets];
@@ -142,6 +164,10 @@
     ComposeTweetViewController *vc = [[ComposeTweetViewController alloc] initWithUser:[Session currentUser]];
     vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void) showMenu {
+    [self.userSession showMenu];
 }
 
 - (void) doTimelineRefresh {

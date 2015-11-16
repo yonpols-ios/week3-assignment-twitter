@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface User : NSObject
 
@@ -14,9 +15,11 @@
 @property (strong, nonatomic) NSString *screenName;
 @property (strong, nonatomic) NSURL *avatarUrl;
 @property (strong, nonatomic) NSURL *backgroundUrl;
+@property (strong, nonatomic) NSURL *bannerUrl;
 @property (strong, nonatomic) NSString *tagLine;
 @property (assign, nonatomic) NSInteger followersCount;
 @property (assign, nonatomic) NSInteger friendsCount;
+@property (strong, nonatomic) UIColor *backgroundColor;
 
 @property (strong, nonatomic) NSDictionary *rawData;
 

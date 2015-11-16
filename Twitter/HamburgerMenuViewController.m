@@ -20,11 +20,20 @@
 @implementation HamburgerMenuViewController {
     CGFloat _originalcontentContainerLeadingConstant;
     BOOL _delegateActionAnswer;
+    UIView *_overlayView;
 }
 
 - (void) viewDidLoad {
     [super viewDidLoad];
     _menuOpen = NO;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    if (self.contentViewController) {
+        return [self.contentViewController preferredStatusBarStyle];
+    } else {
+        return [super preferredStatusBarStyle];
+    }
 }
 
 - (void) setMenuViewController:(UIViewController *)menuViewController {
@@ -60,6 +69,7 @@
         
         [self.delegate hamburgerMenuViewController:self didChangeContentWithAnimation:YES from:_contentViewController to:contentViewController];
         _contentViewController = contentViewController;
+        [self setNeedsStatusBarAppearanceUpdate];
         
         if (self.menuOpen) {
             [self closeMenu];
@@ -68,10 +78,18 @@
 }
 
 - (void) openMenu {
+    if (_overlayView == nil) {
+        _overlayView = [[UIView alloc] initWithFrame:self.contentContainerView.frame];
+        _overlayView.backgroundColor = [UIColor blackColor];
+    }
+
+    _overlayView.alpha = 0;
+    [self.contentContainerView addSubview:_overlayView];
     self.contentViewController.view.userInteractionEnabled = NO;
     self.tapGestureRecognizer.cancelsTouchesInView = YES;
     [UIView animateWithDuration:0.25 animations:^{
         self.contentContainerLeadingConstraint.constant = self.view.frame.size.width - 50;
+        _overlayView.alpha = 0.4;
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _menuOpen = YES && finished;
@@ -85,9 +103,15 @@
 - (void) closeMenu {
     [UIView animateWithDuration:0.25 animations:^{
         self.contentContainerLeadingConstraint.constant = 0;
+        if (_overlayView) {
+            _overlayView.alpha = 0;
+        }
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         _menuOpen = !finished;
+        if (_overlayView) {
+            [_overlayView removeFromSuperview];
+        }
         if (finished && self.delegate) {
             [self.delegate hamburgerMenuViewController:self didCloseMenuWithAnimation:YES];
         }
@@ -118,7 +142,10 @@
             _delegateActionAnswer = YES;
         }
     } else if (sender.state == UIGestureRecognizerStateChanged && _delegateActionAnswer) {
-        self.contentContainerLeadingConstraint.constant = _originalcontentContainerLeadingConstant + translation.x;
+        CGFloat newConstant = _originalcontentContainerLeadingConstant + translation.x;
+        if (newConstant >= 0) {
+            self.contentContainerLeadingConstraint.constant = newConstant;
+        }
     } else if (sender.state == UIGestureRecognizerStateEnded && _delegateActionAnswer) {
         if (velocity.x > 0) {
             [self openMenu];

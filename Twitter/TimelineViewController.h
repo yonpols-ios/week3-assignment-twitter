@@ -12,5 +12,6 @@
 @interface TimelineViewController : UIViewController
 
 @property (strong, nonatomic) UserSession *userSession;
+@property (assign, nonatomic) TwitterTimelineType timelineType;
 
 @end

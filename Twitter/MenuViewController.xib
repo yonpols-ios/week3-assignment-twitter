@@ -8,9 +8,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MenuViewController">
             <connections>
                 <outlet property="avatarImage" destination="Xnc-rC-5Jr" id="MXM-i3-Lj5"/>
+                <outlet property="avatarImageTopConstraint" destination="d65-AH-oc4" id="Dnq-FH-VXH"/>
                 <outlet property="descriptionLabel" destination="8lf-ng-GjU" id="cwx-qh-TX7"/>
                 <outlet property="menuTableView" destination="TKr-65-MBq" id="xfG-IX-Vhy"/>
                 <outlet property="nameLabel" destination="XVU-9g-s8O" id="qGg-EI-P9l"/>
+                <outlet property="nameLabelTopConstraint" destination="hfY-w8-nQc" id="Uhi-oz-59Y"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -19,13 +21,18 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xnc-rC-5Jr">
+                <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Xnc-rC-5Jr">
                     <rect key="frame" x="8" y="28" width="64" height="64"/>
                     <animations/>
+                    <color key="backgroundColor" red="0.0" green="1" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                    <gestureRecognizers/>
                     <constraints>
                         <constraint firstAttribute="height" constant="64" id="VaV-mi-4qI"/>
                         <constraint firstAttribute="width" constant="64" id="pUz-Qz-Q6I"/>
                     </constraints>
+                    <connections>
+                        <outletCollection property="gestureRecognizers" destination="GS4-5d-eJU" appends="YES" id="JXU-XK-gBT"/>
+                    </connections>
                 </imageView>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Juan Pablo" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XVU-9g-s8O">
                     <rect key="frame" x="80" y="28" width="76" height="18"/>
@@ -41,7 +48,7 @@
                     <color key="textColor" red="0.66666666666666663" green="0.72156862745098038" blue="0.76078431372549016" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TKr-65-MBq">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TKr-65-MBq">
                     <rect key="frame" x="8" y="100" width="304" height="460"/>
                     <animations/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -65,5 +72,10 @@
             </constraints>
             <point key="canvasLocation" x="340" y="405"/>
         </view>
+        <tapGestureRecognizer id="GS4-5d-eJU">
+            <connections>
+                <action selector="userAvatarTapGesture:" destination="-1" id="g85-fo-zIt"/>
+            </connections>
+        </tapGestureRecognizer>
     </objects>
 </document>

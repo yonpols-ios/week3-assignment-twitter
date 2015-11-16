@@ -13,12 +13,14 @@
 
 @property (strong, nonatomic, readonly) User *user;
 @property (strong, nonatomic, readonly) TwitterClient *client;
+@property (strong, nonatomic, readonly) UIViewController *currentController;
 
 - (instancetype) initWithUser:(User *)user;
 - (void) presentInWindow:(UIWindow *)window;
 - (void) showProfile;
 - (void) showTimeline;
 - (void) showMentions;
+- (void) showMenu;
 - (void) showTweet:(Tweet *)tweet;
 - (Tweet *) composeTweet:(NSString *)text inReplyTo:(Tweet *)inReplyTo;
 

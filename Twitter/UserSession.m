@@ -12,8 +12,9 @@
 #import "TimelineViewController.h"
 #import "TweetDetailViewController.h"
 #import "ProfileViewController.h"
+#import "CustomNavigationViewController.h"
 
-@interface UserSession()<HamburgerMenuViewControllerDelegate, TweetDetailViewControllerDelegate>
+@interface UserSession()<HamburgerMenuViewControllerDelegate, TweetDetailViewControllerDelegate, UINavigationControllerDelegate>
 
 @end
 
@@ -21,9 +22,12 @@
     HamburgerMenuViewController *_hvc;
     MenuViewController *_mvc;
 
-    UINavigationController *_tlnc;
+    CustomNavigationViewController *_tlnc;
     TimelineViewController *_tlvc;
-    
+
+    CustomNavigationViewController *_mtlnc;
+    TimelineViewController *_mtlvc;
+
     ProfileViewController *_pvc;
 }
 
@@ -49,9 +53,11 @@
 - (void) showProfile:(User *)user {
     if (_pvc == nil) {
         _pvc = [[ProfileViewController alloc] init];
+        _pvc.userSession = self;
     }
     
     _pvc.user = user;
+    
     _hvc.contentViewController = _pvc;
 }
 
@@ -59,15 +65,34 @@
     if (_tlnc == nil) {
         _tlvc = [[TimelineViewController alloc] init];
         _tlvc.userSession = self;
+        _mtlvc.timelineType = TwitterUserTimeline;
 
-        _tlnc = [[UINavigationController alloc] initWithRootViewController:_tlvc];
+        _tlnc = [[CustomNavigationViewController alloc] initWithRootViewController:_tlvc];
+        _tlnc.delegate = self;
     }
     
     _hvc.contentViewController = _tlnc;
 }
 
 - (void) showMentions {
+    if (_mtlnc == nil) {
+        _mtlvc = [[TimelineViewController alloc] init];
+        _mtlvc.userSession = self;
+        _mtlvc.timelineType = TwitterMentionsTimeline;
+        
+        _mtlnc = [[CustomNavigationViewController alloc] initWithRootViewController:_mtlvc];
+        _mtlnc.delegate = self;
+    }
     
+    _hvc.contentViewController = _mtlnc;
+}
+
+- (void) showMenu {
+    if (_hvc.menuOpen) {
+        [_hvc closeMenu];
+    } else {
+        [_hvc openMenu];
+    }
 }
 
 - (void) showTweet:(Tweet *)tweet {
@@ -115,6 +140,14 @@
     
 }
 
+#pragma mark delegate: UINavigationControllerDelegate
+
+- (void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [viewController setNeedsStatusBarAppearanceUpdate];
+    [navigationController setNeedsStatusBarAppearanceUpdate];
+}
+
+
 #pragma mark private methods
 - (UIViewController *)rootViewController {
     if (_hvc == nil) {
@@ -124,6 +157,7 @@
         _mvc = [[MenuViewController alloc] init];
         _mvc.userSession = self;
         _hvc.menuViewController = _mvc;
+        _currentController = _hvc;
     }
     
     return _hvc;

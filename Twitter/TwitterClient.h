@@ -11,6 +11,11 @@
 #import "Tweet.h"
 #import "Session.h"
 
+typedef enum {
+    TwitterUserTimeline,
+    TwitterMentionsTimeline
+} TwitterTimelineType;
+
 @interface TwitterClient : BDBOAuth1RequestOperationManager
 
 + (TwitterClient *) sharedInstance;
@@ -19,7 +24,7 @@
 
 - (void) processOpenUrl:(NSURL *)url;
 
-- (void) homeTimeLineWithParameters:(NSDictionary *)parameters completion:(void (^)(NSArray * tweets, NSError * error))completion;
+- (void) timeline:(TwitterTimelineType)type withParameters:(NSDictionary *)parameters completion:(void (^)(NSArray * tweets, NSError * error))completion;
 
 - (void) likeTweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError *error))completion;
 - (void) unlikeTweet:(Tweet *)tweet completion:(void (^)(NSDictionary *newTweetInfo, NSError * error))completion;

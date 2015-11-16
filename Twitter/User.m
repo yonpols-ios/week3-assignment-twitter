@@ -7,6 +7,7 @@
 //
 
 #import "User.h"
+#import "Utils.h"
 
 @implementation User
 
@@ -17,9 +18,11 @@
         self.screenName = dictionary[@"screen_name"];
         self.avatarUrl = [NSURL URLWithString:dictionary[@"profile_image_url"]];
         self.backgroundUrl = [NSURL URLWithString:dictionary[@"profile_background_image_url"]];
+        self.bannerUrl = [NSURL URLWithString:dictionary[@"profile_banner_url"]];
         self.followersCount = [dictionary[@"followers_count"] longValue];
         self.friendsCount = [dictionary[@"friends_count"] longValue];
         self.tagLine = dictionary[@"description"];
+        self.backgroundColor = [Utils colorFromHexString:dictionary[@"profile_background_color"]];
     }
     
     return self;

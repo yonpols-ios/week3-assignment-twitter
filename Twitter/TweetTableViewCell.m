@@ -48,6 +48,14 @@ long const kNormalActionColor = 0xAAB8C2;
 }
 
 - (IBAction)replyButtonClicked:(id)sender {
+    [UIView animateWithDuration:0.1 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0.2 options:0 animations:^{
+        self.replyButton.transform = CGAffineTransformMakeScale(1.5, 1.5);
+    } completion:^(BOOL finished) {
+        [UIView animateWithDuration:0.05 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
+            self.replyButton.transform = CGAffineTransformMakeScale(1, 1);
+        } completion:nil];
+    }];
+
     if (self.delegate) {
         [self.delegate tweetCell:self replyTweet:self.tweet];
     }
@@ -132,9 +140,11 @@ long const kNormalActionColor = 0xAAB8C2;
         self.retweetedHeightConstraint.priority = 999;
         self.retweetedTopSpaceConstraint.priority = 250;
     }
-    
-    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAvatarTapGestureRecognizer:)];
-    [self.authorImage addGestureRecognizer:tapRecognizer];
+
+    if (self.authorImage.gestureRecognizers.count == 0) {
+        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onAvatarTapGestureRecognizer:)];
+        [self.authorImage addGestureRecognizer:tapRecognizer];
+    }
     
     [self updateRetweetedState:tweet.retweeted withCount:tweet.retweetCount animated:NO];
     [self updateLikedState:tweet.liked withCount:tweet.likeCount animated:NO];
@@ -147,6 +157,16 @@ long const kNormalActionColor = 0xAAB8C2;
     } else {
         [self.retweetButton setImage:[UIImage imageNamed:@"retweet"] forState:UIControlStateNormal];
         self.retweetCountLabel.textColor = UIColorFromRGB(kNormalActionColor);
+    }
+
+    if (animated) {
+        [UIView animateWithDuration:0.1 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0.2 options:0 animations:^{
+            self.retweetButton.transform = CGAffineTransformMakeScale(1.5, 1.5);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.05 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
+                self.retweetButton.transform = CGAffineTransformMakeScale(1, 1);
+            } completion:nil];
+        }];
     }
     
     if (count == 0) {
@@ -163,6 +183,16 @@ long const kNormalActionColor = 0xAAB8C2;
     } else {
         [self.likeButton setImage:[UIImage imageNamed:@"like"] forState:UIControlStateNormal];
         self.likeCountLabel.textColor = UIColorFromRGB(kNormalActionColor);
+    }
+
+    if (animated) {
+        [UIView animateWithDuration:0.1 delay:0 usingSpringWithDamping:0.7 initialSpringVelocity:0.2 options:0 animations:^{
+            self.likeButton.transform = CGAffineTransformMakeScale(1.5, 1.5);
+        } completion:^(BOOL finished) {
+            [UIView animateWithDuration:0.05 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:0 animations:^{
+                self.likeButton.transform = CGAffineTransformMakeScale(1, 1);
+            } completion:nil];
+        }];
     }
 
     if (count == 0) {

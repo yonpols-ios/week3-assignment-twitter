@@ -52,8 +52,23 @@ NSString * const kTwitterBaseUrl = @"https://api.twitter.com";
     }];
 }
 
-- (void) homeTimeLineWithParameters:(NSDictionary *)parameters completion:(void (^)(NSArray * tweets, NSError * error))completion {
-    [self GET:@"/1.1/statuses/home_timeline.json" parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
+- (void) timeline:(TwitterTimelineType)type withParameters:(NSDictionary *)parameters completion:(void (^)(NSArray * tweets, NSError * error))completion {
+    NSString *endpoint;
+
+    switch (type) {
+        case TwitterMentionsTimeline:
+            endpoint = @"/1.1/statuses/mentions_timeline.json";
+            break;
+
+        case TwitterUserTimeline:
+            endpoint = @"/1.1/statuses/home_timeline.json";
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self GET:endpoint parameters:parameters success:^(AFHTTPRequestOperation * _Nonnull operation, id  _Nonnull responseObject) {
         NSArray *tweets = [Tweet tweetsWithArray:responseObject];
         completion(tweets, nil);
     } failure:^(AFHTTPRequestOperation * _Nonnull operation, NSError * _Nonnull error) {

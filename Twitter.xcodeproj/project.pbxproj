@@ -26,6 +26,10 @@
 		18BE8B031BEE81AD00ECE005 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BE8B021BEE81AD00ECE005 /* User.m */; };
 		18BE8B071BEE84D200ECE005 /* TimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18BE8B051BEE84D200ECE005 /* TimelineViewController.m */; };
 		18BE8B081BEE84D200ECE005 /* TimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18BE8B061BEE84D200ECE005 /* TimelineViewController.xib */; };
+		18C527311BF80C3600C5D54F /* alpes.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18C5272E1BF80C3600C5D54F /* alpes.jpg */; };
+		18C527321BF80C3600C5D54F /* avatar.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18C5272F1BF80C3600C5D54F /* avatar.jpg */; };
+		18C527331BF80C3600C5D54F /* vegetation.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 18C527301BF80C3600C5D54F /* vegetation.jpg */; };
+		18C527391BFA359800C5D54F /* CustomNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 18C527381BFA359800C5D54F /* CustomNavigationViewController.m */; };
 		3F24C78D11294235869F9FA9 /* libPods-Twitter.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 231B8AF66D4D95AAFF3E676C /* libPods-Twitter.a */; };
 		CD12F7FE1BF6E0A00080EC3A /* UserSession.m in Sources */ = {isa = PBXBuildFile; fileRef = CD12F7FD1BF6E0A00080EC3A /* UserSession.m */; };
 		CD12F8021BF6F1EE0080EC3A /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CD12F8001BF6F1EE0080EC3A /* ProfileViewController.m */; };
@@ -69,6 +73,11 @@
 		18BE8B041BEE84D200ECE005 /* TimelineViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimelineViewController.h; sourceTree = "<group>"; };
 		18BE8B051BEE84D200ECE005 /* TimelineViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TimelineViewController.m; sourceTree = "<group>"; };
 		18BE8B061BEE84D200ECE005 /* TimelineViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TimelineViewController.xib; sourceTree = "<group>"; };
+		18C5272E1BF80C3600C5D54F /* alpes.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = alpes.jpg; sourceTree = "<group>"; };
+		18C5272F1BF80C3600C5D54F /* avatar.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = avatar.jpg; sourceTree = "<group>"; };
+		18C527301BF80C3600C5D54F /* vegetation.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = vegetation.jpg; sourceTree = "<group>"; };
+		18C527371BFA359800C5D54F /* CustomNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomNavigationViewController.h; sourceTree = "<group>"; };
+		18C527381BFA359800C5D54F /* CustomNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomNavigationViewController.m; sourceTree = "<group>"; };
 		231B8AF66D4D95AAFF3E676C /* libPods-Twitter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Twitter.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		410A9F58E15D1B0D9B1B4CFB /* Pods-Twitter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Twitter.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Twitter/Pods-Twitter.debug.xcconfig"; sourceTree = "<group>"; };
 		CD12F7FC1BF6E0A00080EC3A /* UserSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserSession.h; sourceTree = "<group>"; };
@@ -164,6 +173,9 @@
 		18BE8ADC1BE9AF3B00ECE005 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				18C5272E1BF80C3600C5D54F /* alpes.jpg */,
+				18C5272F1BF80C3600C5D54F /* avatar.jpg */,
+				18C527301BF80C3600C5D54F /* vegetation.jpg */,
 				18BE8ADD1BE9AF3B00ECE005 /* main.m */,
 				1813EF101BEFDAFB009F834A /* Utils.h */,
 				1813EF111BEFDAFB009F834A /* Utils.m */,
@@ -195,6 +207,8 @@
 				CD12F7FF1BF6F1EE0080EC3A /* ProfileViewController.h */,
 				CD12F8001BF6F1EE0080EC3A /* ProfileViewController.m */,
 				CD12F8011BF6F1EE0080EC3A /* ProfileViewController.xib */,
+				18C527371BFA359800C5D54F /* CustomNavigationViewController.h */,
+				18C527381BFA359800C5D54F /* CustomNavigationViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -291,11 +305,14 @@
 			files = (
 				187AE7C51BF039F60032CA49 /* TweetDetailViewController.xib in Resources */,
 				1813EF0A1BEEF812009F834A /* TweetTableViewCell.xib in Resources */,
+				18C527331BF80C3600C5D54F /* vegetation.jpg in Resources */,
+				18C527311BF80C3600C5D54F /* alpes.jpg in Resources */,
 				18BE8AF81BE9BDDC00ECE005 /* LoginViewController.xib in Resources */,
 				18BE8B081BEE84D200ECE005 /* TimelineViewController.xib in Resources */,
 				CDD6D2771BF59A6B00F9BA77 /* MenuViewController.xib in Resources */,
 				187AE7C01BEFECB40032CA49 /* ComposeTweetViewController.xib in Resources */,
 				18BE8AEC1BE9AF3B00ECE005 /* LaunchScreen.storyboard in Resources */,
+				18C527321BF80C3600C5D54F /* avatar.jpg in Resources */,
 				CDD6D2721BF577C700F9BA77 /* HamburgerMenuViewController.xib in Resources */,
 				CD12F8031BF6F1EE0080EC3A /* ProfileViewController.xib in Resources */,
 				18BE8AE91BE9AF3B00ECE005 /* Assets.xcassets in Resources */,
@@ -364,6 +381,7 @@
 				1813EF121BEFDAFB009F834A /* Utils.m in Sources */,
 				CD12F7FE1BF6E0A00080EC3A /* UserSession.m in Sources */,
 				18BE8B031BEE81AD00ECE005 /* User.m in Sources */,
+				18C527391BFA359800C5D54F /* CustomNavigationViewController.m in Sources */,
 				187AE7C41BF039F60032CA49 /* TweetDetailViewController.m in Sources */,
 				18BE8AFC1BE9BECE00ECE005 /* TwitterClient.m in Sources */,
 				1813EF091BEEF812009F834A /* TweetTableViewCell.m in Sources */,
